@@ -1,10 +1,10 @@
 # vom
 
-View Object Modal
+`vom` (View Object Modal) is a library for writing page objects for selenium tests/scripts
 
-## About
+## View Object vs Page Object
 
-`vom` is a library for writing view objects for selenium tests/scripts
+The term "page" is outdated in the context of modern web applications. The term "view" more aligned with the usage of self contained components (e.g. React, Angular, Vue). They represent the same concept however.
 
 ## Installation
 
@@ -12,9 +12,7 @@ View Object Modal
 $ pip install vom
 ```
 
-## Usage
-
-### Classes
+## Getting Started
 
 ```python
 from vom import View
@@ -33,26 +31,19 @@ class Login(View):
         return self.find_element_by_id("loginBtn")
 ```
 
-### Prototyping Views
+### Initialization
+
+The `View` class is initialized with either a `Callable[[], WebElement]` or a `WebDriver` instance though this requires manually setting the root element getter.
+
+Both methods require a `Callable[[], WebElement]` to ensure that `root` never returns a `StaleElementReferenceError`.
 
 ```python
-from selenium import webdriver
-from vom import View
-
-driver = webdriver.Chrome()
-
-login = View(lambda: driver.find_element_by_id("loginForm"))
-login.username = login.find_element_by_name("username")
-login.password = login.find_element_by_name("password")
-login.login = login.find_element_by_id("loginBtn")
+login = Login(lambda: driver.find_element_by_id("loginForm"))
 ```
 
-## Philosophy
+or
 
-### View Object vs Page Object
-
-The term "page" is outdated in the context of modern web applications. The term "view" more aligned with the usage of self contained components (e.g. React, Angular, Vue). They represent the same concept however.
-
-### Elements As Views
-
-The `View` class mirrors the `WebElement` API only returning `View` instead of `WebElement` in methods like `find_element` & `find_elements`. This allow for powerful composability. The original `WebElement` is available from the `root` property.
+```python
+login = View(driver)
+login.root = lambda: driver.find_element_by_id("loginForm")
+```
