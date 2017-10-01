@@ -44,7 +44,7 @@ login = View(driver)
 login.root = lambda: driver.find_element_by_id("loginForm")
 ```
 
-### Element Properties
+## Element Properties
 
 Elements should be properties on the `View` to ensure they never throw a `StaleElementReference`. These element properties are a `View` themselves all the way down.
 
@@ -66,16 +66,49 @@ The `parent` is a reference to its parent `View`. Element properties `parent` wi
 
 ## API
 
-`View` mirrors much of the `WebElement` API with additional utility methods. The `find_element`/`find_elements` family of methods all return `View` instead of `WebElement` scoped within the `root` `WebElement`.
+`View` mirrors most of the `WebElement` API with additional utility methods:
+
+### Finding Elements
+
+The `find_element`/`find_elements` family of methods all return `View` instead of `WebElement` scoped within the `root` `WebElement`.
+
+#### By text
+
+Similar to `find_element_by_link_text` and etc but works for all tag names within the `View`.
+
+- `find_elements_by_text(value, selector="*")`
+- `find_element_by_text(value, selector="*")`
+- `find_elements_by_partial_text(value, selector="*")`
+- `find_element_by_partial_text(value, selector="*")`
+
+### Properties
+
+- `title` Returns the `root` element's `title`
+
+### State
+
+- `has_class(value)` Returns if the `root` element of the `View` has a class
+
+### Content
+
+- `inner_html` Returns the `root` element's `innerHTML`
+- `outer_html` Returns the `root` element's `outerHTML`
+- `inner_text` Returns the `root` element's `innerText`
 
 ### Waiting
 
-`View` has two methods to handle waiting for elements to appear or disappear (e.g. loading screens, async data loading).
+- `wait_until_displayed(timeout=10)`
+- `wait_until_not_displayed(timeout=10)`
 
-```python
-login.username.wait_until_displayed()
-login.username.send_keys("")
-login.password.send_keys("")
-login.login_button.click()
-login.wait_until_not_displayed()
-```
+### Actions
+
+- `focus()`
+- `blur()`
+- `send_keys(value, clear=False)` Set `clear` to true to clear the input before `send_keys`
+
+### Execute Script
+
+Similar to `driver.execute_script` but `arguments[0]` is a reference to the `root` element of the `View`.
+
+- `execute_script(script, *args)`
+- `execute_async_script(script, *args)`
