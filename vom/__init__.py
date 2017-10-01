@@ -9,7 +9,7 @@ class View(object):
     Base View
     """
 
-    def __init__(self, target: Union[WebDriver, Callable], parent: "View" = None):
+    def __init__(self, target: Union[WebDriver, Callable[[], WebElement]], parent: "View" = None):
         """
         View accepts either a WebDriver instance or a callable returning a WebElement
 
@@ -19,7 +19,7 @@ class View(object):
                 return driver.find_element_by_id("exampleForm")
 
             view = View(driver)
-            view.set_root_element(get_example_form)
+            view.root = get_example_form
 
             # or
 
@@ -36,7 +36,8 @@ class View(object):
         if isinstance(target, Callable):
             self._init_from_callable(target)
 
-        print()
+    def __str__(self):
+        return self.text
 
     @property
     def root(self) -> WebElement:
@@ -59,9 +60,9 @@ class View(object):
         self.root = lambda: self.driver.find_element_by_tag_name("html")
         print()
 
-    def _init_from_callable(self, fn: Callable[[], WebDriver]):
-        self.root = fn
-        self._driver: Callable[[], WebDriver] = lambda: self.root.parent
+    def _init_from_callable(self, root: Callable[[], WebElement]):
+        self.root = root
+        self.driver: Callable[[], WebDriver] = lambda: self.root.parent
 
     def __eq__(self, other: "View"):
         return self.id == other.id
