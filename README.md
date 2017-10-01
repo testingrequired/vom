@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/testingrequired/vom.svg?branch=master)](https://travis-ci.org/testingrequired/vom)
+[![PyPI version](https://badge.fury.io/py/vom.svg)](https://badge.fury.io/py/vom)
 
 # vom
 
