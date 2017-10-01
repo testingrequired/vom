@@ -112,3 +112,7 @@ Similar to `driver.execute_script` but `arguments[0]` is a reference to the `roo
 
 - `execute_script(script, *args)`
 - `execute_async_script(script, *args)`
+
+### Transform
+
+- `as_select` Return the `root` element wrapped in a `Select`
