@@ -1,6 +1,6 @@
 # vom
 
-`vom` (View Object Modal) is a library for writing page objects for selenium tests/scripts
+`vom` (View Object Modal) is an opinionated framework for writing page objects for selenium tests/scripts
 
 ## View Object vs Page Object
 
