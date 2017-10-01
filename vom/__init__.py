@@ -24,7 +24,8 @@ class View(object):
             # or
 
             view = View(get_example_form)
-        :param Union[WebDriver,Callable] target:
+
+        :param Union[WebDriver, Callable[[], WebElement] target:
         """
         self._root: Union[Callable[[], WebElement], Callable[[], None]] = lambda: None
         self._driver: Union[Callable[[], WebDriver], None] = None

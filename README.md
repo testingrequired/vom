@@ -40,7 +40,7 @@ login = Login(lambda: driver.find_element_by_id("loginForm"))
 or
 
 ```python
-login = View(driver)
+login = Login(driver)
 login.root = lambda: driver.find_element_by_id("loginForm")
 ```
 
