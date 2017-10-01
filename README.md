@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/testingrequired/vom.svg?branch=master)](https://travis-ci.org/testingrequired/vom)
+
 # vom
 
 `vom` (View Object Modal) is an opinionated framework for writing page objects for selenium tests/scripts
