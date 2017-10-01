@@ -27,7 +27,7 @@ class View(object):
         :param Union[WebDriver,Callable] target:
         """
         self._root: Union[Callable[[], WebElement], Callable[[], None]] = lambda: None
-        self.driver: Union[WebDriver, None] = None
+        self._driver: Union[Callable[[], WebDriver], None] = None
         self.parent = parent
 
         if isinstance(target, WebDriver):
@@ -46,19 +46,22 @@ class View(object):
     def root(self, value):
         self._root = value
 
+    @property
+    def driver(self):
+        return self._driver()
+
+    @driver.setter
+    def driver(self, value):
+        self._driver = value
+
     def _init_from_driver(self, driver: WebDriver):
-        self.driver: WebDriver = driver
+        self.driver: WebDriver = lambda: driver
         self.root = lambda: self.driver.find_element_by_tag_name("html")
         print()
 
     def _init_from_callable(self, fn: Callable[[], WebDriver]):
-        element = fn()
-
-        if not isinstance(element, WebElement):
-            raise ValueError(f"target must be a callable returning a WebElement")
-
         self.root = fn
-        self.driver: WebDriver = element.parent
+        self._driver: Callable[[], WebDriver] = lambda: self.root.parent
 
     def __eq__(self, other: "View"):
         return self.id == other.id
