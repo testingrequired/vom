@@ -9,7 +9,7 @@ setup(
     url="https://github.com/testingrequired/vom",
     keywords=["selenium", "page-object", "testing", "automation", "test", "tests"],
     license="MIT",
-    packages=find_packages(exclude=['venv']),
+    packages=find_packages(exclude=['venv', 'test']),
     install_requires=['selenium'],
     python_requires="~=3.6",
     classifiers=[
