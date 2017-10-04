@@ -59,7 +59,6 @@ class View(object):
     def _init_from_driver(self, driver: WebDriver):
         self.driver: WebDriver = lambda: driver
         self.root = lambda: self.driver.find_element_by_tag_name("html")
-        print()
 
     def _init_from_callable(self, root: Callable[[], WebElement]):
         self.root = root
