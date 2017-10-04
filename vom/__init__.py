@@ -267,7 +267,7 @@ class View(object):
     # Waiting
 
     def wait_until_displayed(self, timeout=10):
-        return WebDriverWait(self.driver, timeout).until(lambda d: self.is_displayed)
+        return WebDriverWait(None, timeout).until(lambda _: self.is_displayed)
 
     def wait_until_not_displayed(self, timeout=10):
-        return WebDriverWait(self.driver, timeout).until(lambda d: not self.is_displayed)
+        return WebDriverWait(None, timeout).until(lambda _: not self.is_displayed)
