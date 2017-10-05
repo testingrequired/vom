@@ -184,80 +184,104 @@ class View(object):
 
     # Find Element/s
 
-    def find_element(self, by: By, value) -> "View":
-        return View(lambda: self.root.find_element(by, value), self)
+    def find_element(self, by: By, value, view_cls: "View" = None) -> "View":
+        """
+        Find one element matching condition
+        :param by: Type of condition
+        :param value: Condition value
+        :param cls: Optional custom class to wrap returned elements
+        :return: Matching element wrapped in a view
+        """
+        if view_cls is not None and not issubclass(view_cls.__class__, View):
+            raise ValueError(f"cls must be a subclass of View")
+        else:
+            view_cls = View
 
-    def find_elements(self, by: By, value) -> List["View"]:
+        return view_cls(lambda: self.root.find_element(by, value), self)
+
+    def find_elements(self, by: By, value, view_cls: "View" = None) -> List["View"]:
+        """
+        Find one or more elements matching condition
+        :param by: Type of condition
+        :param value: Condition value
+        :param cls: Optional custom class to wrap returned elements
+        :return: List of matching web elements wrapped in a view
+        """
+        if view_cls is not None and not issubclass(view_cls.__class__, View):
+            raise ValueError(f"cls must be a subclass of View")
+        else:
+            view_cls = View
+
         def get_elements():
             return self.root.find_elements(by, value)
 
         def get_element_at_index(i):
             return lambda: get_elements()[i]
 
-        return [View(get_element_at_index(i), self) for i, element in enumerate(get_elements())]
+        return [view_cls(get_element_at_index(i), self) for i, element in enumerate(get_elements())]
 
-    def find_element_by_css_selector(self, value):
-        return self.find_element(By.CSS_SELECTOR, value)
+    def find_element_by_css_selector(self, value, view_cls = None):
+        return self.find_element(By.CSS_SELECTOR, value, view_cls)
 
-    def find_elements_by_css_selector(self, value):
-        return self.find_elements(By.CSS_SELECTOR, value)
+    def find_elements_by_css_selector(self, value, view_cls = None):
+        return self.find_elements(By.CSS_SELECTOR, value, view_cls)
 
-    def find_element_by_tag_name(self, value):
-        return self.find_element(By.TAG_NAME, value)
+    def find_element_by_tag_name(self, value, view_cls = None):
+        return self.find_element(By.TAG_NAME, value, view_cls)
 
-    def find_elements_by_tag_name(self, value):
-        return self.find_elements(By.TAG_NAME, value)
+    def find_elements_by_tag_name(self, value, view_cls = None):
+        return self.find_elements(By.TAG_NAME, value, view_cls)
 
-    def find_element_by_xpath(self, value):
-        return self.find_element(By.XPATH, value)
+    def find_element_by_xpath(self, value, view_cls = None):
+        return self.find_element(By.XPATH, value, view_cls)
 
-    def find_elements_by_xpath(self, value):
-        return self.find_elements(By.XPATH, value)
+    def find_elements_by_xpath(self, value, view_cls = None):
+        return self.find_elements(By.XPATH, value, view_cls)
 
-    def find_element_by_class_name(self, value):
-        return self.find_element(By.CLASS_NAME, value)
+    def find_element_by_class_name(self, value, view_cls = None):
+        return self.find_element(By.CLASS_NAME, value, view_cls)
 
-    def find_elements_by_class_name(self, value):
-        return self.find_elements(By.CLASS_NAME, value)
+    def find_elements_by_class_name(self, value, view_cls = None):
+        return self.find_elements(By.CLASS_NAME, value, view_cls)
 
-    def find_element_by_id(self, value):
-        return self.find_element(By.ID, value)
+    def find_element_by_id(self, value, view_cls = None):
+        return self.find_element(By.ID, value, view_cls)
 
-    def find_elements_by_id(self, value):
-        return self.find_elements(By.ID, value)
+    def find_elements_by_id(self, value, view_cls = None):
+        return self.find_elements(By.ID, value, view_cls)
 
-    def find_element_by_link_text(self, value):
-        return self.find_element(By.LINK_TEXT, value)
+    def find_element_by_link_text(self, value, view_cls = None):
+        return self.find_element(By.LINK_TEXT, value, view_cls)
 
-    def find_elements_by_link_text(self, value):
-        return self.find_elements(By.LINK_TEXT, value)
+    def find_elements_by_link_text(self, value, view_cls = None):
+        return self.find_elements(By.LINK_TEXT, value, view_cls)
 
-    def find_element_by_partial_link_text(self, value):
-        return self.find_element(By.PARTIAL_LINK_TEXT, value)
+    def find_element_by_partial_link_text(self, value, view_cls = None):
+        return self.find_element(By.PARTIAL_LINK_TEXT, value, view_cls)
 
-    def find_elements_by_partial_link_text(self, value):
-        return self.find_elements(By.PARTIAL_LINK_TEXT, value)
+    def find_elements_by_partial_link_text(self, value, view_cls = None):
+        return self.find_elements(By.PARTIAL_LINK_TEXT, value, view_cls)
 
-    def find_element_by_name(self, value):
-        return self.find_element(By.NAME, value)
+    def find_element_by_name(self, value, view_cls = None):
+        return self.find_element(By.NAME, value, view_cls)
 
-    def find_elements_by_name(self, value):
-        return self.find_elements(By.NAME, value)
+    def find_elements_by_name(self, value, view_cls = None):
+        return self.find_elements(By.NAME, value, view_cls)
 
-    def find_elements_by_text(self, value):
-        return [e for e in self.find_elements_by_css_selector("*") if e.text == value]
+    def find_elements_by_text(self, value, selector="*", view_cls = None):
+        return [e for e in self.find_elements_by_css_selector(selector, view_cls) if e.text == value]
 
-    def find_element_by_text(self, value):
-        elements = self.find_elements_by_text(value)
+    def find_element_by_text(self, value, selector="*", view_cls = None):
+        elements = self.find_elements_by_text(value, selector, view_cls)
         if len(elements) == 0:
             raise NoSuchElementException(f"No elements found with text: `{value}`")
         return elements[0]
 
-    def find_elements_by_partial_text(self, value, selector="*"):
-        return [e for e in self.find_elements_by_css_selector("*") if value in e.text]
+    def find_elements_by_partial_text(self, value, selector="*", view_cls = None):
+        return [e for e in self.find_elements_by_css_selector(selector, view_cls) if value in e.text]
 
-    def find_element_by_partial_text(self, value):
-        elements = self.find_elements_by_partial_text(value)
+    def find_element_by_partial_text(self, value, selector="*", view_cls = None):
+        elements = self.find_elements_by_partial_text(value, selector, view_cls)
         if len(elements) == 0:
             raise NoSuchElementException(f"No elements found with text: `{value}`")
         return elements[0]
