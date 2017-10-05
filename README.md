@@ -75,6 +75,19 @@ The `parent` is a reference to its parent `View`. Element properties `parent` wi
 
 The `find_element`/`find_elements` family of methods all return `View` instead of `WebElement` scoped within the `root` `WebElement`.
 
+#### Custom View Class
+
+Element/s are wrapped in a `View` class before being returned from `find_element`/`find_elements` family of methods. A custom subclass of `View` can be passed using the `view_cls` argument.
+
+```python
+class CustomView(View): pass
+
+view.find_element(By.CSS_SELECTOR, "input[placeholder='username']", view_cls=CustomView)
+view.find_element_by_css_selector("p", view_cls=CustomView)
+```
+
+This is useful if you have common logic across multiple elements.
+
 #### By text
 
 Similar to `find_element_by_link_text` and etc but works for all tag names within the `View`.
