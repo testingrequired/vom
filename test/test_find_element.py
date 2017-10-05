@@ -4,11 +4,6 @@ from unittest.mock import Mock
 from selenium.webdriver.remote.webdriver import WebElement
 
 
-@pytest.fixture
-def element():
-    return Mock(spec=WebElement)
-
-
 def test__custom_view_class__subclass__doesnt_raise_error(element):
     view = View(lambda: element)
 

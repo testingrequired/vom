@@ -1,15 +1,8 @@
 import pytest
 from vom import View
 from unittest.mock import Mock
-from selenium.webdriver.remote.webdriver import WebElement
 
 
-@pytest.fixture
-def element():
-    e = Mock(spec=WebElement)
-    return e
-
-@pytest.mark.skip("WIP")
 def test__custom_view_class__subclass__doesnt_raise_error(element):
     view = View(lambda: element)
     subclass = Mock(spec=View)
