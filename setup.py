@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="vom",
-    version="0.1.1",
+    version="0.1.2",
     description="An opinionated framework for writing page objects for selenium tests/scripts",
     author="Kylee Tilley",
     author_email="kyleetilley@gmail.com",
