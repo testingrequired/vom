@@ -50,7 +50,12 @@ class View(object):
 
     @property
     def driver(self):
-        return self._driver()
+        try:
+            d = self._driver()
+        except NoSuchElementException as e:
+            raise RuntimeError(f"Root element not present on the page") from e
+        else:
+            return d
 
     @driver.setter
     def driver(self, value):
