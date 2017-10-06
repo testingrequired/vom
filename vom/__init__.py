@@ -291,6 +291,12 @@ class View(object):
             raise NoSuchElementException(f"No elements found with text: `{value}`")
         return elements[0]
 
+    def find_inputs_by_placeholder(self, value, view_cls=None):
+        return self.find_elements_by_css_selector(f"input[type=text][placeholder='{value}']", view_cls)
+
+    def find_input_by_placeholder(self, value, view_cls=None):
+        return self.find_element_by_css_selector(f"input[placeholder='{value}']", view_cls)
+
 
     # Waiting
 
