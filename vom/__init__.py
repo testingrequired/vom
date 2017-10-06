@@ -79,7 +79,7 @@ class View(object):
     # Properties
 
     def get_attribute(self, name):
-        self.root.get_attribute(name)
+        return self.root.get_attribute(name)
 
     def get_property(self, name):
         return self.root.get_property(name)
