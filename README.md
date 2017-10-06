@@ -97,14 +97,14 @@ Similar to `find_element_by_link_text` and etc but works for all tag names withi
 - `find_elements_by_partial_text(value, selector="*")`
 - `find_element_by_partial_text(value, selector="*")`
 
+##### Custom Selector
+
+The default css selector used is `*` but any valid css selector can be used to filter elements against.
+
 #### By input placeholder
 
 - `find_inputs_by_placeholder(value)`
 - `find_input_by_placeholder(value)`
-
-##### Custom Selector
-
-The default css selector used is `*` but any valid css selector can be used to filter elements against.
 
 ### Properties
 
