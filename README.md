@@ -97,6 +97,10 @@ Similar to `find_element_by_link_text` and etc but works for all tag names withi
 - `find_elements_by_partial_text(value, selector="*")`
 - `find_element_by_partial_text(value, selector="*")`
 
+##### Custom Selector
+
+The default css selector used is `*` but any valid css selector can be used to filter elements against.
+
 ### Properties
 
 - `title` Returns the `root` element's `title`
