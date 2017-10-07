@@ -34,38 +34,19 @@ class Login(View):
         return self.find_element_by_id("loginBtn")
 ```
 
-Then using:
+A `View` is then initialized by passing a `Callable[[], WebElement]` and the `WebElement` reference must be fresh.
 
 ```python
 login = Login(lambda: driver.find_element_by_id("loginForm"))
-```
-
-or
-
-```python
-login = Login(driver)
-login.root = lambda: driver.find_element_by_id("loginForm")
 ```
 
 ## Element Properties
 
 Elements should be properties on the `View` to ensure they never throw a `StaleElementReference`. These element properties are a `View` themselves all the way down.
 
-## Root Element
+### Root Element
 
-The `root` element of the `View` is the underlying `WebElement`.
-
-### Setting
-
-The `root` can be set by assigning a `Callable[[], WebElement]`.
-
-```python
-login.root = lambda: driver.find_element_by_id("loginForm")
-```
-
-## Parent View
-
-The `parent` is a reference to its parent `View`. Element properties `parent` will be the `View` that defined them.
+The `root` element of the `View` is the underlying `WebElement`. All other element properties are within the `root` element scope.
 
 ## API
 
