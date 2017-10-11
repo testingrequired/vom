@@ -197,9 +197,7 @@ class View(object):
         :param cls: Optional custom class to wrap returned elements
         :return: Matching element wrapped in a view
         """
-        if view_cls is not None and not issubclass(view_cls.__class__, View):
-            raise ValueError(f"cls must be a subclass of View")
-        else:
+        if view_cls is None:
             view_cls = View
 
         return view_cls(lambda: self.root.find_element(by, value), self)
@@ -212,9 +210,7 @@ class View(object):
         :param cls: Optional custom class to wrap returned elements
         :return: List of matching web elements wrapped in a view
         """
-        if view_cls is not None and not issubclass(view_cls.__class__, View):
-            raise ValueError(f"cls must be a subclass of View")
-        else:
+        if view_cls is None:
             view_cls = View
 
         def get_elements():
