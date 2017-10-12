@@ -146,7 +146,13 @@ class View(object):
 
     @property
     def is_displayed(self):
-        return self.root.is_displayed()
+        result = False
+        try:
+            result = self.root.is_displayed()
+        except NoSuchElementException:
+            pass
+        finally:
+            return result
 
     def has_class(self, value):
         classes = self.get_attribute("class").split(" ")
