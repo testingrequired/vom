@@ -214,7 +214,14 @@ class View(object):
             view_cls = View
 
         def get_elements():
-            return self.root.find_elements(by, value)
+            results = []
+
+            try:
+                results = self.root.find_elements(by, value)
+            except NoSuchElementException:
+                pass
+            finally:
+                return results
 
         def get_element_at_index(i):
             return lambda: get_elements()[i]
