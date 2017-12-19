@@ -1,6 +1,6 @@
 import pytest
 from vom import View
-from unittest.mock import Mock
+from mock import Mock
 from selenium.webdriver.remote.webdriver import WebElement
 
 
@@ -9,8 +9,8 @@ def element():
     return Mock(spec=WebElement)
 
 
-def test__view(element: WebElement):
+def test__view(element):
     try:
         View(lambda: element)
     except Exception as e:
-        pytest.fail(f"Failed to initialize View: {e}")
+        pytest.fail("Failed to initialize View: {}".format(e))

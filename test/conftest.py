@@ -1,5 +1,5 @@
 import pytest
-from unittest.mock import Mock
+from mock import Mock
 from selenium.webdriver.remote.webdriver import WebElement
 from vom import View
 
@@ -10,7 +10,8 @@ def element():
     e.find_element = Mock()
     e.find_element.return_value = Mock(spec=WebElement)
     e.find_elements = Mock()
-    e.find_elements.return_value = [Mock(spec=WebElement), Mock(spec=WebElement)]
+    e.find_elements.return_value = [
+        Mock(spec=WebElement), Mock(spec=WebElement)]
     return e
 
 

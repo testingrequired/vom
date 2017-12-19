@@ -1,5 +1,5 @@
 import pytest
-from unittest.mock import Mock
+from mock import Mock
 from selenium.webdriver.remote.webdriver import WebElement
 
 
