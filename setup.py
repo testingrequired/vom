@@ -2,12 +2,13 @@ from setuptools import setup, find_packages
 
 setup(
     name="vom",
-    version="1.0.0",
+    version="1.0.1",
     description="An opinionated framework for writing page objects for selenium tests/scripts",
     author="Kylee Tilley",
     author_email="kyleetilley@gmail.com",
     url="https://github.com/testingrequired/vom",
-    keywords=["selenium", "page-object", "testing", "automation", "test", "tests"],
+    keywords=["selenium", "page-object",
+              "testing", "automation", "test", "tests"],
     license="MIT",
     packages=find_packages(exclude=['venv', 'test']),
     install_requires=['selenium'],
