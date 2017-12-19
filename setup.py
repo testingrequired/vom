@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="vom",
-    version="1.0.1",
+    version="1.0.2",
     description="An opinionated framework for writing page objects for selenium tests/scripts",
     author="Kylee Tilley",
     author_email="kyleetilley@gmail.com",
@@ -11,8 +11,7 @@ setup(
               "testing", "automation", "test", "tests"],
     license="MIT",
     packages=find_packages(exclude=['venv', 'test']),
-    install_requires=['selenium'],
-    python_requires="~=3.6, ~=2.7",
+    install_requires=['selenium', 'future', 'typing', 'mock'],
     classifiers=[
         "Development Status :: 3 - Alpha",
         "License :: OSI Approved :: MIT License",
