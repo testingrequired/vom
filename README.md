@@ -11,6 +11,8 @@ The term "page" is outdated in the context of modern web applications. The term 
 
 ## Installation
 
+Tested on Python 2.7.x & 3.6.x
+
 ```bash
 $ pip install vom
 ```
@@ -24,11 +26,11 @@ class Login(View):
     @property
     def username(self):
         return self.find_element_by_name("username")
-    
+
     @property
     def password(self):
         return self.find_element_by_name("password")
-    
+
     @property
     def login_button(self):
         return self.find_element_by_id("loginBtn")
@@ -73,10 +75,10 @@ This is useful if you have common logic across multiple elements.
 
 Similar to `find_element_by_link_text` and etc but works for all tag names within the `View`.
 
-- `find_elements_by_text(value, selector="*")`
-- `find_element_by_text(value, selector="*")`
-- `find_elements_by_partial_text(value, selector="*")`
-- `find_element_by_partial_text(value, selector="*")`
+* `find_elements_by_text(value, selector="*")`
+* `find_element_by_text(value, selector="*")`
+* `find_elements_by_partial_text(value, selector="*")`
+* `find_element_by_partial_text(value, selector="*")`
 
 ##### Custom Selector
 
@@ -84,41 +86,41 @@ The default css selector used is `*` but any valid css selector can be used to f
 
 #### By input placeholder
 
-- `find_inputs_by_placeholder(value)`
-- `find_input_by_placeholder(value)`
+* `find_inputs_by_placeholder(value)`
+* `find_input_by_placeholder(value)`
 
 ### Properties
 
-- `title` Returns the `root` element's `title`
+* `title` Returns the `root` element's `title`
 
 ### State
 
-- `has_class(value)` Returns if the `root` element of the `View` has a class
+* `has_class(value)` Returns if the `root` element of the `View` has a class
 
 ### Content
 
-- `inner_html` Returns the `root` element's `innerHTML`
-- `outer_html` Returns the `root` element's `outerHTML`
-- `inner_text` Returns the `root` element's `innerText`
+* `inner_html` Returns the `root` element's `innerHTML`
+* `outer_html` Returns the `root` element's `outerHTML`
+* `inner_text` Returns the `root` element's `innerText`
 
 ### Waiting
 
-- `wait_until_displayed(timeout=10)`
-- `wait_until_not_displayed(timeout=10)`
+* `wait_until_displayed(timeout=10)`
+* `wait_until_not_displayed(timeout=10)`
 
 ### Actions
 
-- `focus()`
-- `blur()`
-- `send_keys(value, clear=False)` Set `clear` to true to clear the input before `send_keys`
+* `focus()`
+* `blur()`
+* `send_keys(value, clear=False)` Set `clear` to true to clear the input before `send_keys`
 
 ### Execute Script
 
 Similar to `driver.execute_script` but `arguments[0]` is a reference to the `root` element of the `View`.
 
-- `execute_script(script, *args)`
-- `execute_async_script(script, *args)`
+* `execute_script(script, *args)`
+* `execute_async_script(script, *args)`
 
 ### Transform
 
-- `as_select` Return the `root` element wrapped in a `Select`
+* `as_select` Return the `root` element wrapped in a `Select`
