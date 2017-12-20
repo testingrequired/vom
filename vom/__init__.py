@@ -11,7 +11,7 @@ class View(object):
     """
 
     def __init__(self, target, parent=None):
-        # type: (target: Union[WebDriver, Callable[[], WebElement]], View)
+        # type: (Union[WebDriver, Callable[[], WebElement]], View) -> None
         """
         View accepts either a WebDriver instance or a callable returning a WebElement
 
@@ -27,9 +27,10 @@ class View(object):
 
             view = View(get_example_form)
         """
-        self._root = lambda: None
-        self._driver = None
-        self.parent = parent
+
+        self._root = lambda: None  # type: Callable[[], WebElement]
+        self._driver = None  # type: Union[Callable[[], WebDriver], None]
+        self.parent = parent  # type: View
 
         if isinstance(target, WebDriver):
             self._init_from_driver(target)
@@ -43,11 +44,12 @@ class View(object):
     @property
     def root(self):
         # type: () -> WebElement
-        return self._root()
+        element = self._root()  # type: WebElement
+        return element
 
     @root.setter
     def root(self, value):
-        # type: () -> WebElement
+        # type: (WebElement) -> None
         self._root = value
 
     @property
@@ -228,7 +230,7 @@ class View(object):
         Find one element matching condition
         :param by: Type of condition
         :param value: Condition value
-        :param cls: Optional custom class to wrap returned elements
+        :param view_cls: Optional custom class to wrap returned elements
         :return: Matching element wrapped in a view
         """
         if view_cls is None:
@@ -242,7 +244,7 @@ class View(object):
         Find one or more elements matching condition
         :param by: Type of condition
         :param value: Condition value
-        :param cls: Optional custom class to wrap returned elements
+        :param view_cls: Optional custom class to wrap returned elements
         :return: List of matching web elements wrapped in a view
         """
         if view_cls is None:
@@ -353,11 +355,11 @@ class View(object):
         return elements[0]
 
     def find_inputs_by_placeholder(self, value, view_cls=None):
-        # type: (str, str, View) -> List[View]
+        # type: (str, View) -> List[View]
         return self.find_elements_by_css_selector("input[type=text][placeholder='{}']".format(value), view_cls)
 
     def find_input_by_placeholder(self, value, view_cls=None):
-        # type: (str, str, View) -> View
+        # type: (str, View) -> View
         return self.find_element_by_css_selector("input[placeholder='{}']".format(value), view_cls)
 
     # Waiting
