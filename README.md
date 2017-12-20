@@ -66,7 +66,7 @@ The `root` element of the `View` is the underlying `WebElement`. All other eleme
 
 ## API
 
-`View` mirrors most of the `WebElement` API with additional utility methods:
+`View` mirrors most of the `WebElement` [API](http://selenium-python.readthedocs.io/api.html) with additional utility methods:
 
 ### Finding Elements
 
