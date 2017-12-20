@@ -3,4 +3,4 @@
 set -e
 
 python -m pytest
-python setup.py sdist bdist_wheel
+python setup.py bdist_wheel --universal
