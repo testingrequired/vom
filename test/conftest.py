@@ -1,5 +1,5 @@
 import pytest
-from mock import Mock
+from mock import Mock, PropertyMock
 from selenium.webdriver.remote.webdriver import WebElement
 from vom import View
 
