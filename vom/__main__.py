@@ -12,4 +12,6 @@ if __name__ == '__main__':
     page.header = page.find_element_by_tag_name("h1")
     page.texts = page.find_elements_by_tag_name("p")
 
+    page.click()
+
     print(page.header)

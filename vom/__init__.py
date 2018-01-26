@@ -41,6 +41,12 @@ class View(object):
     def __str__(self):
         return self.text
 
+    def __getattr__(self, item):
+        try:
+            return getattr(self.root, item)
+        except AttributeError as e:
+            raise_from(AttributeError("Neither View or root WebElement has method `{}`".format(item)), e)
+
     @property
     def root(self):
         # type: () -> WebElement
@@ -81,34 +87,12 @@ class View(object):
         # type: (View) -> bool
         return self.id == other.id
 
-    @property
-    def id(self):
-        return self.root.id
-
     # Properties
-
-    def get_attribute(self, name):
-        # type: (str) -> None
-        return self.root.get_attribute(name)
-
-    def get_property(self, name):
-        # type: (str) -> Any
-        return self.root.get_property(name)
 
     @property
     def title(self):
         # type: () -> str
         return self.execute_script("return arguments[0].title")
-
-    @property
-    def tag_name(self):
-        # type: () -> str
-        return self.root.tag_name
-
-    @property
-    def text(self):
-        # type: () -> str
-        return self.root.text
 
     # Transform
 
@@ -133,38 +117,6 @@ class View(object):
     def inner_text(self):
         # type: () -> str
         return self.root.get_attribute("innerText")
-
-    def screenshot(self, filename):
-        # type: () -> str
-        return self.root.screenshot(filename)
-
-    @property
-    def screenshot_as_base64(self):
-        # type: () -> str
-        return self.root.screenshot_as_base64()
-
-    @property
-    def screenshot_as_png(self, filename):
-        # type: () -> bytes
-        return self.root.screenshot_as_png
-
-    # Dimensions/Location
-
-    @property
-    def rect(self):
-        return self.root.rect
-
-    @property
-    def size(self):
-        return self.root.size
-
-    @property
-    def location(self):
-        return self.root.location
-
-    @property
-    def location_once_scrolled_into_view(self):
-        return self.root.location_once_scrolled_into_view
 
     # State
 
@@ -194,12 +146,6 @@ class View(object):
         classes = self.get_attribute("class").split(" ")
         return value in classes
 
-    # Style/CSS
-
-    def value_of_css_property(self, property_name):
-        # type: (str) -> str
-        return self.root.value_of_css_property(property_name)
-
     # Javascript
 
     def execute_script(self, script, *args):
@@ -212,21 +158,11 @@ class View(object):
 
     # Actions
 
-    def click(self):
-        self.root.click()
-
-    def clear(self):
-        self.root.clear()
-
     def send_keys(self, value, clear=False):
         # type: (str, bool) -> None
         if clear:
             self.clear()
         self.root.send_keys(value)
-
-    def submit(self):
-        # type: () -> None
-        self.root.submit()
 
     def focus(self):
         # type: () -> None
