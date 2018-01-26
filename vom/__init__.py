@@ -134,6 +134,20 @@ class View(object):
         # type: () -> str
         return self.root.get_attribute("innerText")
 
+    def screenshot(self, filename):
+        # type: () -> str
+        return self.root.screenshot(filename)
+
+    @property
+    def screenshot_as_base64(self):
+        # type: () -> str
+        return self.root.screenshot_as_base64()
+
+    @property
+    def screenshot_as_png(self, filename):
+        # type: () -> bytes
+        return self.root.screenshot_as_png
+
     # Dimensions/Location
 
     @property
