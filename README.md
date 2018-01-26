@@ -138,9 +138,3 @@ Similar to `driver.execute_script` but `arguments[0]` is a reference to the `roo
 ### Transform
 
 * `as_select` Return the `root` element wrapped in a `Select`
-
-### Screenshots
-
-* `screenshot(filename)` Save png screenshot of element to file
-* `screenshot_as_base64` Return base64 encoded screenshot of element
-* `screenshot_as_png` Return png screenshot of element
