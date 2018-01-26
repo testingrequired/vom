@@ -80,7 +80,7 @@ Element/s are wrapped in a `View` class before being returned from `find_element
 class CustomView(View): pass
 
 view.find_element(By.CSS_SELECTOR, "input[placeholder='username']", view_cls=CustomView)
-view.find_element_by_css_selector("p", view_cls=CustomView)
+view.find_element_by_css_selector("#someElementId", CustomView)
 ```
 
 This is useful if you have common logic across multiple elements.
