@@ -120,37 +120,16 @@ class ViewDriver(object):
         # type: (str, View) -> List[View]
         return self.find_elements(By.NAME, value, view_cls)
 
+
 class View(object):
     """
     Base View
     """
 
-    def __init__(self, target, parent=None):
-        # type: (Union[WebDriver, Callable[[], WebElement]], View) -> None
-        """
-        View accepts either a WebDriver instance or a callable returning a WebElement
-
-        Usage::
-
-            def get_example_form():
-                return driver.find_element_by_id("exampleForm")
-
-            view = View(driver)
-            view.root = get_example_form
-
-            # or
-
-            view = View(get_example_form)
-        """
-
-        self._root = lambda: None  # type: Callable[[], WebElement]
-        self._driver = None  # type: Union[Callable[[], WebDriver], None]
-
-        if isinstance(target, WebDriver):
-            self._init_from_driver(target)
-
-        if isinstance(target, Callable):
-            self._init_from_callable(target)
+    def __init__(self, target):
+        # type: (Callable[[], WebElement]) -> None
+        self._root = target  # type: Callable[[], WebElement]
+        self._driver = lambda: self.root.parent  # type: Callable[[], WebDriver]
 
     def __str__(self):
         return self.text
@@ -167,11 +146,6 @@ class View(object):
         element = self._root()  # type: WebElement
         return element
 
-    @root.setter
-    def root(self, value):
-        # type: (WebElement) -> None
-        self._root = value
-
     @property
     def driver(self):
         # type: () -> WebDriver
@@ -186,16 +160,6 @@ class View(object):
     def driver(self, value):
         # type: (WebDriver) -> None
         self._driver = value
-
-    def _init_from_driver(self, driver):
-        # type: (WebDriver) -> None
-        self.driver = lambda: driver
-        self.root = lambda: self.driver.find_element_by_tag_name("html")
-
-    def _init_from_callable(self, root):
-        # type: (Callable[[], WebElement]) -> None
-        self.root = root
-        self.driver = lambda: self.root.parent
 
     def __eq__(self, other):
         # type: (View) -> bool
