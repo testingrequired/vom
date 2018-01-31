@@ -40,7 +40,7 @@ A `View` is then initialized by passing a `Callable[[], WebElement]` where the `
 
 ```python
 login = Login(lambda: driver.find_element_by_id("loginForm"))
-```
+``` 
 
 ## Element Properties
 
@@ -124,3 +124,13 @@ Similar to `driver.execute_script` but `arguments[0]` is a reference to the `roo
 ### Transform
 
 * `as_select` Return the `root` element wrapped in a `Select`
+
+## ViewDriver
+
+```python
+options = webdriver.ChromeOptions()
+options.add_argument("--headless")
+driver = ViewDriver(webdriver.Chrome(chrome_options=options))
+```
+
+This wrapped `WebDriver` instance will return `View`s from `find_element/s` making them easier to initialize. All other `WebDriver` method calls will proxy to the underlying instance.

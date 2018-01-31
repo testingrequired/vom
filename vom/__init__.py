@@ -5,6 +5,121 @@ from selenium.common.exceptions import NoSuchElementException
 from future.utils import raise_from
 
 
+class ViewDriver(object):
+    def __init__(self, driver):
+        self.driver = driver  # type: WebDriver
+
+    def __getattr__(self, item):
+        try:
+            return getattr(self.driver, item)
+        except AttributeError as e:
+            raise_from(AttributeError("Neither View or root WebElement has method `{}`".format(item)), e)
+
+    def find_element(self, by, value, view_cls=None):
+        # type: (By, Any, View) -> View
+        """
+        Find one element matching condition
+        :param by: Type of condition
+        :param value: Condition value
+        :param view_cls: Optional custom class to wrap returned elements
+        :return: Matching element wrapped in a view
+        """
+        if view_cls is None:
+            view_cls = View
+
+        return view_cls(lambda: self.driver.find_element(by, value))
+
+    def find_elements(self, by, value, view_cls=None):
+        # type: (By, Any, Value) -> List[View]
+        """
+        Find one or more elements matching condition
+        :param by: Type of condition
+        :param value: Condition value
+        :param view_cls: Optional custom class to wrap returned elements
+        :return: List of matching web elements wrapped in a view
+        """
+        if view_cls is None:
+            view_cls = View
+
+        def get_elements():
+            results = []
+
+            try:
+                results = self.driver.find_elements(by, value)
+            except NoSuchElementException:
+                pass
+            finally:
+                return results
+
+        def get_element_at_index(i):
+            return lambda: get_elements()[i]
+
+        return [view_cls(get_element_at_index(i)) for i, element in enumerate(get_elements())]
+
+    def find_element_by_css_selector(self, value, view_cls=None):
+        # type: (str, View) -> View
+        return self.find_element(By.CSS_SELECTOR, value, view_cls)
+
+    def find_elements_by_css_selector(self, value, view_cls=None):
+        # type: (str, View) -> List[View]
+        return self.find_elements(By.CSS_SELECTOR, value, view_cls)
+
+    def find_element_by_tag_name(self, value, view_cls=None):
+        # type: (str, View) -> View
+        return self.find_element(By.TAG_NAME, value, view_cls)
+
+    def find_elements_by_tag_name(self, value, view_cls=None):
+        # type: (str, View) -> List[View]
+        return self.find_elements(By.TAG_NAME, value, view_cls)
+
+    def find_element_by_xpath(self, value, view_cls=None):
+        # type: (str, View) -> View
+        return self.find_element(By.XPATH, value, view_cls)
+
+    def find_elements_by_xpath(self, value, view_cls=None):
+        # type: (str, View) -> List[View]
+        return self.find_elements(By.XPATH, value, view_cls)
+
+    def find_element_by_class_name(self, value, view_cls=None):
+        # type: (str, View) -> View
+        return self.find_element(By.CLASS_NAME, value, view_cls)
+
+    def find_elements_by_class_name(self, value, view_cls=None):
+        # type: (str, View) -> List[View]
+        return self.find_elements(By.CLASS_NAME, value, view_cls)
+
+    def find_element_by_id(self, value, view_cls=None):
+        # type: (str, View) -> View
+        return self.find_element(By.ID, value, view_cls)
+
+    def find_elements_by_id(self, value, view_cls=None):
+        # type: (str, View) -> List[View]
+        return self.find_elements(By.ID, value, view_cls)
+
+    def find_element_by_link_text(self, value, view_cls=None):
+        # type: (str, View) -> View
+        return self.find_element(By.LINK_TEXT, value, view_cls)
+
+    def find_elements_by_link_text(self, value, view_cls=None):
+        # type: (str, View) -> List[View]
+        return self.find_elements(By.LINK_TEXT, value, view_cls)
+
+    def find_element_by_partial_link_text(self, value, view_cls=None):
+        # type: (str, View) -> View
+        return self.find_element(By.PARTIAL_LINK_TEXT, value, view_cls)
+
+    def find_elements_by_partial_link_text(self, value, view_cls=None):
+        # type: (str, View) -> List[View]
+        return self.find_elements(By.PARTIAL_LINK_TEXT, value, view_cls)
+
+    def find_element_by_name(self, value, view_cls=None):
+        # type: (str, View) -> View
+        return self.find_element(By.NAME, value, view_cls)
+
+    def find_elements_by_name(self, value, view_cls=None):
+        # type: (str, View) -> List[View]
+        return self.find_elements(By.NAME, value, view_cls)
+
 class View(object):
     """
     Base View
@@ -30,7 +145,6 @@ class View(object):
 
         self._root = lambda: None  # type: Callable[[], WebElement]
         self._driver = None  # type: Union[Callable[[], WebDriver], None]
-        self.parent = parent  # type: View
 
         if isinstance(target, WebDriver):
             self._init_from_driver(target)
@@ -186,7 +300,7 @@ class View(object):
         if view_cls is None:
             view_cls = View
 
-        return view_cls(lambda: self.root.find_element(by, value), self)
+        return view_cls(lambda: self.root.find_element(by, value))
 
     def find_elements(self, by, value, view_cls=None):
         # type: (By, Any, Value) -> List[View]
@@ -213,7 +327,7 @@ class View(object):
         def get_element_at_index(i):
             return lambda: get_elements()[i]
 
-        return [view_cls(get_element_at_index(i), self) for i, element in enumerate(get_elements())]
+        return [view_cls(get_element_at_index(i)) for i, element in enumerate(get_elements())]
 
     def find_element_by_css_selector(self, value, view_cls=None):
         # type: (str, View) -> View
