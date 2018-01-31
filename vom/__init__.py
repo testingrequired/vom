@@ -92,7 +92,7 @@ class View(object):
     @property
     def title(self):
         # type: () -> str
-        return self.execute_script("return arguments[0].title")
+        return self.root.get_attribute("title")
 
     # Transform
 
@@ -150,7 +150,7 @@ class View(object):
 
     def execute_script(self, script, *args):
         # type: (str, *Any) -> Any
-        return self.driver.execute_script(script, *([self.root] + args))
+        return self.driver.execute_script(script, *([self.root] + list(args)))
 
     def execute_async_script(self, script, *args):
         # type: (str, *Any) -> Any
