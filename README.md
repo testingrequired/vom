@@ -3,11 +3,7 @@
 
 # vom
 
-`vom` (View Object Modal) is an opinionated framework for writing page objects for selenium tests/scripts
-
-## View Object vs Page Object
-
-The term "page" is outdated in the context of modern web applications. The term "view" more aligned with the usage of self contained components (e.g. React, Angular, Vue). They represent the same concept however.
+`vom` (View Object Model) is an opinionated framework for writing page objects for selenium tests/scripts
 
 ## Installation
 
@@ -17,91 +13,95 @@ Tested on Python 2.7.x & 3.6.x
 $ pip install vom
 ```
 
-## Getting Started
+## Usage
+
+Defining view objects is as easy as extending `View`:
 
 ```python
 from vom import View
 
-class Login(View):
+class LoginForm(View):
     @property
     def username(self):
-        return self.find_element_by_name("username")
-
+        return self.find_element_by_id("username")
+    
     @property
     def password(self):
-        return self.find_element_by_name("password")
-
+        return self.find_element_by_id("password")
+    
     @property
-    def login_button(self):
-        return self.find_element_by_id("loginBtn")
+    def submit_button(self):
+        return self.find_element_by_css_selector("input[type='submit']")
 ```
 
-A `View` is then initialized by passing a `Callable[[], WebElement]` where the `WebElement` is the View's [root element](#root-element).
+Notice you don't see any references to a `WebDriver` instance. Lets initialize the view object:
 
 ```python
-login = Login(lambda: driver.find_element_by_id("loginForm"))
-``` 
-
-## Element Properties
-
-Elements should be properties on the `View` to ensure they never throw a `StaleElementReference`. These element properties are a `View` themselves all the way down.
-
-### Root Element
-
-The `root` element of the `View` is the underlying `WebElement`. All other element properties are within the `root` element scope.
-
-## API
-
-`View` mirrors most of the `WebElement` [API](http://selenium-python.readthedocs.io/api.html) with additional utility methods:
-
-### Finding Elements
-
-The `find_element`/`find_elements` family of methods all return `View` instead of `WebElement` scoped within the `root` `WebElement`.
-
-#### Custom View Class
-
-Element/s are wrapped in a `View` class before being returned from `find_element`/`find_elements` family of methods. A custom subclass of `View` can be passed using the `view_cls` argument.
-
-```python
-class CustomView(View): pass
-
-view.find_element(By.CSS_SELECTOR, "input[placeholder='username']", view_cls=CustomView)
-view.find_element_by_css_selector("#someElementId", CustomView)
+login = LoginForm(lambda: driver.find_element_by_id("login-form"))
 ```
 
-This is useful if you have common logic across multiple elements.
+The view object is initialized by passing a `Callable[[], WebElement]`. The `WebDriver` instance is object from the `WebElement`. Its a `Callable` because we need to be able to get a fresh reference to the `WebElement` at any time.
 
-#### By text
+## Defining element properties
 
-Similar to `find_element_by_link_text` and etc but works for all tag names within the `View`.
+The view object `WebElement` references are should be defined as properties. This ensure fresh references to all elements. See [StaleElementReferenceException](http://selenium-python.readthedocs.io/api.html#selenium.common.exceptions.StaleElementReferenceException)
+
+### Querying
+
+All `find_element/s` methods on `WebElement` can be called on `View`. Results from these method calls will be wrapped in a `View`. Custom `View` implementations can be passed allowing for custom logic:
+
+```python
+from vom import View
+
+class OptionComponent(View):
+    @property
+    def switch(self):
+        self.driver.find_element_by_id("switch")
+    
+    def toggle(self):
+        self.switch.click()
+
+class SearchForm(View):
+    @property
+    def some_search_option(self):
+        self.find_element_by_id("some-search-option-id", OptionComponent)
+
+search = SearchForm(lambda: driver.find_element_by_id("search-form"))
+search.some_search_option.toggle()
+```
+
+## `WebElement` API
+
+`View` will proxy undefined method calls to its `WebElement` allowing you to treat them as a souped up `WebElement`.
+
+## Utility Methods
+
+There are a number of utility methods to supplement the `WebElement` methods.
+
+### Find Element/s by Text
+
+Similar to `find_element/s_by_link_text` & `find_element/s_by_partial_link_text` but across all tags. They also allow for a custom `selector`.
 
 * `find_elements_by_text(value, selector="*")`
 * `find_element_by_text(value, selector="*")`
 * `find_elements_by_partial_text(value, selector="*")`
 * `find_element_by_partial_text(value, selector="*")`
 
-##### Custom Selector
-
-The default css selector used is `*` but any valid css selector can be used to filter elements against.
-
-#### By input placeholder
+### Find Input/s
 
 * `find_inputs_by_placeholder(value)`
 * `find_input_by_placeholder(value)`
 
 ### Properties
 
-* `title` Returns the `root` element's `title`
-
-### State
-
-* `has_class(value)` Returns if the `root` element of the `View` has a class
+* `title` Return the `WebElement` title property
+* `has_class(value)` Returns if `WebElement` has css class
 
 ### Content
 
-* `inner_html` Returns the `root` element's `innerHTML`
-* `outer_html` Returns the `root` element's `outerHTML`
-* `inner_text` Returns the `root` element's `innerText`
+* `inner_html` Returns the `innerHTML` of the `WebElement`
+* `outer_html` Returns the `outerHTML` of the `WebElement`
+* `inner_text` Returns the `innerText` of the `WebElement`
 
 ### Waiting
 
@@ -110,9 +110,8 @@ The default css selector used is `*` but any valid css selector can be used to f
 
 ### Actions
 
-* `focus()`
-* `blur()`
-* `send_keys(value, clear=False)` Set `clear` to true to clear the input before `send_keys`
+* `focus()` Focus the `WebElement`
+* `blur()` Blur the `WebElement`
 
 ### Execute Script
 
@@ -123,14 +122,25 @@ Similar to `driver.execute_script` but `arguments[0]` is a reference to the `roo
 
 ### Transform
 
-* `as_select` Return the `root` element wrapped in a `Select`
+* `as_select` Return the `WebElement` wrapped in a `Select`
 
 ## ViewDriver
 
-```python
-options = webdriver.ChromeOptions()
-options.add_argument("--headless")
-driver = ViewDriver(webdriver.Chrome(chrome_options=options))
-```
+`ViewDriver` is a utility class which wraps `WebDriver`. It provides similar `find_element/s` methods that `View` does.
 
-This wrapped `WebDriver` instance will return `View`s from `find_element/s` making them easier to initialize. All other `WebDriver` method calls will proxy to the underlying instance.
+```python
+from selenium import webdriver
+from vom import ViewDriver
+
+if __name__ == '__main__':
+    options = webdriver.ChromeOptions()
+    options.add_argument("--headless")
+    driver = ViewDriver(webdriver.Chrome(chrome_options=options))
+
+    driver.get("http://example.com")
+
+    login = driver.find_element_by_id("login-form", LoginForm)
+    login.username.send_keys("")
+    login.password.send_keys("")
+    login.submit_buttom.click()
+```
