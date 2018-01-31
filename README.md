@@ -34,21 +34,25 @@ class LoginForm(View):
         return self.find_element_by_css_selector("input[type='submit']")
 ```
 
-Notice you don't see any references to a `WebDriver` instance. Lets initialize the view object:
+Lets initialize the view object:
 
 ```python
 login = LoginForm(lambda: driver.find_element_by_id("login-form"))
 ```
 
-The view object is initialized by passing a `Callable[[], WebElement]`. The `WebDriver` instance is object from the `WebElement`. Its a `Callable` because we need to be able to get a fresh reference to the `WebElement` at any time.
+The view object is initialized by passing a `Callable[[], WebElement]`. The `WebDriver` instance is object from the `WebElement`. Its a `Callable` because we need to be able to get a fresh reference to the `WebElement` at any time. See [StaleElementReferenceException](http://selenium-python.readthedocs.io/api.html#selenium.common.exceptions.StaleElementReferenceException)
 
-## Defining element properties
+## Root `WebElement`
 
-The view object `WebElement` references are should be defined as properties. This ensure fresh references to all elements. See [StaleElementReferenceException](http://selenium-python.readthedocs.io/api.html#selenium.common.exceptions.StaleElementReferenceException)
+The `WebElement` returned from the `Callable[[], WebElement]` will serve as the root for the view object.
+
+### Method Calls
+
+`View` will proxy all undefined methods to its `WebElement` allowing you to treat them as a super powered `WebElement`.
 
 ### Querying
 
-All `find_element/s` methods on `WebElement` can be called on `View`. Results from these method calls will be wrapped in a `View`. Custom `View` implementations can be passed allowing for custom logic:
+Querying for a view object's elements can be done with the same methods you use on `WebElement`. All of the results from these calls are then wrapped in a `View`. Custom view object implementations can be passed for advanced logic.
 
 ```python
 from vom import View
@@ -69,10 +73,6 @@ class SearchForm(View):
 search = SearchForm(lambda: driver.find_element_by_id("search-form"))
 search.some_search_option.toggle()
 ```
-
-## `WebElement` API
-
-`View` will proxy undefined method calls to its `WebElement` allowing you to treat them as a souped up `WebElement`.
 
 ## Utility Methods
 
