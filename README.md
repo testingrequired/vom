@@ -56,7 +56,7 @@ from vom import View
 class OptionComponent(View):
     @property
     def switch(self):
-        self.driver.find_element_by_id("switch")
+        self.find_element_by_id("switch")
     
     def toggle(self):
         self.switch.click()
