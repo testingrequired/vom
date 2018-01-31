@@ -42,6 +42,8 @@ login = LoginForm(lambda: driver.find_element_by_id("login-form"))
 
 The view object is initialized by passing a `Callable[[], WebElement]`. The `WebDriver` instance is object from the `WebElement`. Its a `Callable` because we need to be able to get a fresh reference to the `WebElement` at any time. See [StaleElementReferenceException](http://selenium-python.readthedocs.io/api.html#selenium.common.exceptions.StaleElementReferenceException)
 
+Passing a lambda can be cumbersome. The [`ViewDriver`](#viewdriver) utility class can streamline this.
+
 ## Root `WebElement`
 
 The `WebElement` returned from the `Callable[[], WebElement]` will serve as the root for the view object.
