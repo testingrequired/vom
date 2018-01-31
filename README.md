@@ -3,7 +3,7 @@
 
 # vom
 
-`vom` (View Object Model) is an opinionated framework for writing page objects for selenium tests/scripts
+`vom` (View Object Model) is a library for writing page objects for selenium tests/scripts
 
 ## Installation
 
