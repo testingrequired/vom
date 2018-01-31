@@ -42,20 +42,6 @@ A `View` is then initialized by passing a `Callable[[], WebElement]` where the `
 login = Login(lambda: driver.find_element_by_id("loginForm"))
 ```
 
-### Applications
-
-Applications will have multiple view objects. Each one will need to be initialized which can become cumbersome. A pattern to help with this is an App class. It holds the `WebDriver` instance reference and exposes view objects as properties.
-
-```python
-class App(object):
-    def __init__(self, driver):
-        self.driver = driver
-    
-    @property
-    def login(self):
-        return Login(lambda: self.driver.find_element_by_id("loginForm"))
-```
-
 ## Element Properties
 
 Elements should be properties on the `View` to ensure they never throw a `StaleElementReference`. These element properties are a `View` themselves all the way down.
